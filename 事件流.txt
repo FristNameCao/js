@@ -1,0 +1,12 @@
+1.js代码中国只能执行捕捉或者冒泡的一个阶段
+
+2.onclick和attachEvent 只能得到冒泡阶段
+
+3.addeventListener(type(事件类型)，listener[,useCapture]第三个参数如果是true，表示在捕获阶段调用事件处理程序；如果是false(默认不写就是false)，表示在事件冒泡阶段调用事件处理程序)
+
+4.实际开发中很少使用事件捕获，我们更关注事件冒泡
+
+5.有些事件是没有冒泡的，比如onblur，onfocus，onmouseenter，onmuseleave
+
+6.事件冒泡有时候会带来麻烦，有时候又会版主很巧妙的做些某些事件
+

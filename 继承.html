@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // //原型继承
+    // // 1.建立一个函数Parent
+    // function Parent(name) {
+    //   this.name = name
+    //   this.children = ['a', 'b']
+    // }
+    // // 2.建立一个函数Child
+    // function Child() {
+
+    // }
+    // // 3.然后把Parent new给 Child函数原型上，意思就是Child用原型继承Parent
+    // Child.prototype = new Parent()
+
+    // // 4.然后再创建一个child实列,测试一下该继承会不会跟Parent数据共享了
+    // // 如果你不知道什么是实列我可以告诉你左边是实列右边是实例化
+    // let child = new Child()
+
+    // //5.然后给children添加一个 c测试
+    // child.children.push("c")
+
+    // //6.结果
+    // console.log(child.children)// ['a', 'b',  'c']
+
+    // //7.然后再创建一个child1实列,测试一下该继承会不会跟child数据共享了
+    // let child1 = new Child()
+    // // 7.1在测试一下会不会无法向Parent传参
+    // child1.name = 'CC'
+    // //8.结果
+    // console.log(child1)
+    // name: "CC"
+    // [[Prototype]]: Parent
+    // children: (4)['a', 'b', 'c']
+    // name: undefined
+
+
+    /*总结
+    原型链继承的主要问题：
+    1. 引用类型的属性被所有实例共享
+    2. 在创建Child的实例的时候，不能向Parent传参
+    */
+
+
+    // 2.借用构造函数
+    // 为解决原型中包含引用类型值所带来的问题，
+    // 人们开始用一种叫做借用构造函数的技术来实现继承。
+    // 这种技术的基本思想非常简单，即在子类构造函数内部调用超类构造函数。
+
+    //   //1.首先创建一个Parent
+    //   function Parent(name) {
+    //     // 这里输出的this是Child
+    //     console.log(this)
+    //     this.name = name
+    //     this.children = ['a', 'b']
+
+    //     this.getName = function () {
+    //       return this.name
+    //     }
+    //   }
+    //   //2.然后创建一个Child
+    //   function Child(name) {
+
+    //     // call()方法使用一个指定的this值和单独给出的一个或多个参数来调用一个函数
+    //     Parent.call(this, name)
+
+    //     // Parent()
+    //     // this.name = name;
+    //     // this.children = ["a", "b"];
+
+    //     // this.getName = function () {
+    //     //   return this.name;
+    //     // };
+    //   }
+    //   //3.这里 实例化同时传递一个参数C1
+    //   let child1 = new Child("C1");
+    //   //4.给child1添加一个c
+    //   child1.children.push("c");
+    //   // 5.然后输出看看是什么
+    //   console.log('child1', child1.name, "==", child1.children);
+    //   /*
+    //   这里的name成功被传递了C1
+    //    C1 ==  ['a', 'b', 'c']
+    //   */
+    //   // 6.然后创建child2，顺便传递一个C2
+    //   let child2 = new Child("C2");
+    //   // 7.然后给children添加d
+    //   child2.children.push("d");
+    //   // 8.然后看看输出什么
+    //   console.log('child2', child2.name, "==", child2.children);
+    //   /*
+    //   c2也成功传入进去
+    //    C2 == ['a', 'b', 'd']
+    //   */
+    //  // 最后再看看child1属性有没有被更改
+    //     console.log('child1', child1.name, "==", child1.children);
+
+    /*
+    拿到的是没有被更改的
+     C1 == ['a', 'b', 'c']
+    */
+
+    // 接下来总结一下吧
+    // 优点： 避免了引用类型的属性被所有实例共享 可以直接在Child中向Parent传参
+    // 缺点： 方法都在构造函数中定义了，每次创建实例都会创建一遍方法
+    /*    Child{}
+          >children: (3) ['a', 'b', 'd']
+          >getName: ƒ ()我说的方法就是这个也就是Parent每次都会被创建
+           name: "C2"
+          >[[Prototype]]: Object
+    */
+
+    // 3.组合继承
+    /*
+    组合继承就是将原型链和借用构造函数的技术结合到一起，
+    背后思想是使用原型链实现对方法的继承，
+    通过借用构造函数实现对属性的继承。
+    这样，既能够保证能够通过原型定义的方法实现函数复用，
+    又能够保证每个实例有自己的属性。
+    */
+    // 1.老规矩先创建一个父级函数
+    //   function Parent(name) {
+    //     this.name = name
+    //     this.children = ['a', 'b']
+
+    //     /*这里有个函数看下面就知道了
+    //     this.getName = function(){
+    //     return this.name
+    //   }
+    //     */
+    //   }
+    //   // 2.接着我给父级函数的原型添加一个函数
+    //   Parent.prototype.getName = function () {
+    //     return this.name
+    //   }
+    //   // 3.然后我创建一个子集函数
+    //   function Child(name) {
+    //     // 继续把name绑定如果不理解请看主页前面文章
+    //     Parent.call(this, name)
+    //   }
+
+    //   // 4.好了我开始实例化Parent到Child原型上
+    //   Child.prototype = new Parent()
+
+    //   // 5.我把Child赋值给自己constructor然后就完成继承了
+    //   Child.prototype.constructor = Child
+
+    //   // 6.开始创建一个实列来检测
+    //   let child1 = new Child('C1')
+    //   // 8.children添加CC
+    //   child1.children.push('CC')
+    //   // 然后输出看看得到什么
+    //   console.log('child1', child1.name, "==", child1.children)
+    //   //  C1 == ['a', 'b', 'CC']  很成功的传值C1 和添加CC
+
+    //   // 9.接下来再创建一个实例检测
+
+    //   let child2 = new Child('C2')
+
+    //   // 10.给children添加CC2
+    //   child2.children.push("CC2")
+    //   // 看看得到什么结果吧
+    //   console.log('child2', child2.name, "==", child2.children)
+    //   // C2 ==  ['a', 'b', 'CC2'] 看C2也成功传参然后是CC2成功添加
+    //   // 再看看child1会不会被改变呢，毕竟child2并没有看到有之前child1添加进去的CC，
+    //   // 所以理论上这个也不会有改变
+    //   console.log('child1', child1.name, "==", child1.children)
+    //   //  C1 == ['a', 'b', 'CC'] 很不错没有改变
+
+    //   // 11.然后看看控制台输出分析优缺点
+    //   console.log(child2);
+    //   /*
+    //  >Child {name: 'C2', children: Array(3)}
+    //   >children: (3) ['a', 'b', 'CC2']
+    //    name: "C2"
+    //    >[[Prototype]]: Parent
+    //     > children: (2) ['a', 'b']
+    //     > constructor: ƒ Child(name)
+    //       name: undefined
+    //    >[[Prototype]]: Object
+    //   */
+
+    //   /*
+    //   总结：
+    //   组合继承既具有原型链继承能够复用函数的特性，
+    //   又有借用构造函数方式能够保证每个子类实例能够拥有自己的属性以及向超类传参的特性，
+    //   但组合继承也并不是完美实现继承的方式，因为这种方式在创建子类时会调用两次超类的构造函数。
+    //   也就是这个内容
+    //   >[[Prototype]]: Parent
+    //     > children: (2) ['a', 'b']
+    //     > constructor: ƒ Child(name)
+    //       name: undefined
+    //    >[[Prototype]]: Object
+    //     >getName: ƒ ()
+    //     >constructor: ƒ Parent(name)
+    //     >[[Prototype]]: Object
+
+    //     缺点:父类构造函数的重复调用执行，会造成浪费，如果父类构造函数共有属性极多，会导致运行速度减慢。
+    //          父类的属性会在原型上多加一次。
+    //   */
+
+
+    // 寄生组合试继承
+    /*
+    组合继承是 JavaScript最常用的继承模式，
+    其最大的问题是不管在什么情况下都会调用两次超类构造函数：
+    一次是在创建子类原型时，一次是在子类型构造函数内部。
+    子类型最终会包含超类的全部实例属性。
+
+    所谓寄生组合式继承，即通过构造函数来继承属性，通过原型链继承方法，
+    背后的基本思路是：不必为了指定子类的原型而调用父类的构造函数，
+    我们所需要的无非就是父类原型的一个副本而已。
+
+    */
+    // 1.首先创建一个函数
+    function inherit(child, parent) {
+      // child 子类
+      // parent 父类
+      // 复制父类原型
+      // Object.create()方法用于创建一个新对象，使用现有的对象来作为新创建对象的原型（prototype）
+      const ParentPrototype = Object.create(parent.prototype)
+      // 赋值给子类原型
+      child.prototype = ParentPrototype
+      // 子类 constructor 指回 child
+      child.prototype.constructor = child
+
+    }
+    // Object.create(parent) => 返回一个新对象 新对象的原型  parent
+
+    // function create(o) {
+    //   function F() {}
+    //   F.prototype = o;
+    //   return new F();
+    // }
+
+
+    //总结
+    /*
+    inherit() 函数实现了寄生组合式继承的最简单形式，
+    参数有两个：子类构造函数和父类构造函数。
+    在函数内部进行了三步操作：第一步是创建超类原型的一个副本(parent)，第二步是将新创建的对象赋值给子类的原型(Object.create(parent.prototype))。
+    最后一步，为创建的副本添加 constructor 属性(child.prototype.constructor = child)，从而弥补因重写原型而失去的默认的 constructor 属性。
+
+    */
+
+
+
+
+    // 完整版本的继承
+
+    //  1.首先创建一个Parent函数
+    function Parent(name) {
+      this.name = name
+      this.children = ['a', 'b']
+    }
+    // 2.然后创建一个函数在原型上
+    Parent.prototype.getName = function () {
+      return this.name
+    }
+    // 3.继续创建子类
+    function Child(name) {
+      // 用this绑定为了继承父类属性
+      Parent.call(this, name)
+    }
+    //
+
+    function inherit(child, parent) {
+      // child 子类
+      // parent 父类
+      // 复制父类原型
+      const parentPrototype = Object.create(parent.prototype);
+      // 改变constructor 指回 child
+      parentPrototype.constructor = child;
+      // 赋值给子类
+      child.prototype = parentPrototype;
+    }
+
+
+  // 原型继承，缺点实例属性共享，不能向a传参
+    /**
+   * 父类构造函数
+   */
+      function Parent() {
+        this.name = 'parent';
+      }
+
+      /**
+       * 父类原型方法
+       */
+      Parent.prototype.sayHello = function () {
+        console.log('Hello, ' + this.name);
+      };
+
+      /**
+       * 子类构造函数
+       */
+      function Child() { }
+
+      // 将父类实例作为子类原型对象
+      Child.prototype = new Parent();
+
+      // 子类实例
+      var child = new Child();
+
+      // 调用父类原型方法
+      child.sayHello(); // Hello, parent
+
+    // 构造函数继承法
+    function a(name){
+      this.name
+      this.children = ['a','b']
+
+      this.c= function(){
+        return this.name
+      }
+    }
+
+    function b(name){
+      a.call(this,name)
+    }
+
+
+
+ function a(name){
+  this.name = name
+ }
+ a.prototype.b=function(){
+  return this.name
+ }
+
+
+ function a(name){
+  this.name
+ }
+
+ function b(){
+  a.call(this,name)
+ }
+
+
+function a(z,f){
+  const parent = Object.create(f.prototype)
+
+  z.prototype =  parent
+  z.constructor =z
+
+}
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script>
+
+
+    // 手写防抖函数
+    function debounce(func, delay) {
+      let timer; // 定义定时器变量
+      return function () {// 返回一个函数
+
+        const context = this; // 保存函数执行时的上下文
+        const args = arguments; // 保存函数执行时的参数
+
+        clearTimeout(timer); // 清除之前的定时器
+
+        timer = setTimeout(() => {
+          func.apply(context, args); // 按照指定的时间间隔执行函数
+
+        }, delay);
+      }
+    }
+
+    // 使用示例
+    function handleInput() {
+      console.log('输入框输入了');
+    }
+
+    const debouncedHandleInput = debounce(handleInput, 500);
+    // 创建一个防抖函数
+    document.querySelector('input').addEventListener('input', debouncedHandleInput); // 给输入框添加防抖事件
+
+
+
+    // 手写节流函数
+    function throttle(func, delay) {
+      let lastTime = 0; // 记录上一次执行函数的时间
+
+      return function () {  // 返回一个函数
+
+        const context = this;  // 保存函数执行时的上下文
+
+        const args = arguments; // 保存函数执行时的参数
+
+        const nowTime = Date.now(); // 记录当前时间
+
+        if (nowTime - lastTime >= delay) {  // 如果当前时间与上一次执行函数的时间间隔超过指定时间间隔
+
+          func.apply(context, args);   // 执行函数
+
+          lastTime = nowTime; // 更新上一次执行函数的时间
+
+        }
+      }
+    }
+
+    // 使用示例
+    function handleScroll() { console.log('页面滚动了'); }
+    // 创建一个节流函数
+    const throttledHandleScroll = throttle(handleScroll, 500);
+    // 给页面添加节流事件
+    document.addEventListener('scroll', throttledHandleScroll);
+
+
+  </script>
+</body>
+
+</html>

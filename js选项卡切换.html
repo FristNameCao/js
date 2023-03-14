@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #tab {
+      margin: auto;
+      width: 100%;
+      height: 100%;
+
+    }
+
+
+
+    ul {
+      display: flex;
+      justify-content: space-around;
+      padding-left: 5px;
+    }
+
+    li {
+      list-style: none;
+      margin-left: 24px;
+      font-size: 24px;
+    }
+
+    .current {
+      background-color: pink;
+    }
+
+    .items {
+      display: flex;
+      justify-content: space-around;
+
+    }
+
+    .item {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="tab">
+    <div class="tab_list">
+      <ul>
+        <li class="current">前端初级</li>
+        <li>前端中级</li>
+        <li>前端高级</li>
+        <li>前端架构</li>
+      </ul>
+    </div>
+    <div class="items">
+      <div class="item" style="display: block;">
+        能独立开发简单页面，简单项目
+      </div>
+      <div class="item">
+        能独挡一面，独立开发复杂项目，复杂页面，可以自己写简单组件库
+      </div>
+      <div class="item">
+        能独立开发任意复杂项目，任意挑战性的组件库
+      </div>
+      <div class="item">
+        开发使用技术选定者，部门老大，公司cto
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+  // 获取tab_list
+  let tab_list = document.querySelector('.tab_list')
+  // 获取tab_list下面所有li
+  let current_list = tab_list.querySelectorAll('li')
+
+  let itemEl = document.querySelectorAll('.item')
+
+  // 遍历li
+  for (let i = 0; i < current_list.length; ++i) {
+
+    // 设置cursor
+    current_list.forEach(item => {
+      item.style.cursor = 'pointer'
+    })
+    // 设置一个index,方法一
+    current_list[i].setAttribute('index', i)
+    // 给每一个li加上事件
+    current_list[i].addEventListener('click', function () {
+
+      // 遍历每一个li
+      current_list.forEach(item => {
+        // 给每一个li''
+        item.className = ''
+      })
+      // 给当前li赋值class current
+      current_list[i].className = 'current'
+
+      // 把li的下标保存好
+      // 方法一
+      // const index = i
+
+      //方法二 拿到当前index,这里的this是current_list[i]的i
+      console.log('this111', this)
+      const index = this.getAttribute('index')
+      // itemEl
+      for (let item = 0; item < itemEl.length; ++item) {
+        itemEl.forEach(item => {
+          // 给itemEl每一个style属性设置 none
+          item.style.display = 'none'
+        })
+      }
+      // 拿到li的下标后给itemEl,然后对应的itemEl显示block
+      itemEl[index].style.display = 'block'
+
+    })
+  }
+</script>

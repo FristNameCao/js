@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 实现 apply 方法
+    Function.prototype.myApply = function (context, args) {
+      // 如果传入的 context 为空，则默认为全局对象
+      context = context || window;
+      // 将当前函数作为方法添加到 context 中
+      context.fn = this;
+      // 执行函数并获取返回值
+      var result = context.fn(...args);
+      // 删除添加的方法
+      delete context.fn;
+      // 返回函数执行的结果
+      return result;
+    }
+
+
+    // 实现 bind 方法
+    Function.prototype.myBind = function (context) {
+      var self = this;
+      // 返回一个新的函数
+      return function () {
+        // 如果当前函数作为构造函数使用，则 this 指向实例对象
+        if (this instanceof self) {
+          self.apply(this, arguments);
+        } else {
+          // 将当前函数的 this 指向 context，并传入参数
+          self.apply(context, arguments);
+        }
+      }
+    }
+
+    // 实现 call 方法
+    Function.prototype.myCall = function (context, ...args) {
+      // 如果传入的 context 为空，则默认为全局对象
+      context = context || window;
+      // 将当前函数作为方法添加到 context 中
+      context.fn = this;
+      // 执行函数并获取返回值
+      var result = context.fn(...args);
+      // 删除添加的方法
+      delete context.fn;
+      // 返回函数执行的结果
+      return result;
+    }
+
+
+    // 测试 apply 方法
+    function sum(a, b, c) { return a + b + c; }
+    var result = sum.myApply(null, [1, 2, 3]);
+    console.log(result); // 输出 6
+
+    // 测试 bind 方法
+    var obj = { name: 'Tom' };
+    function sayName() { console.log(this.name); }
+    var sayTomName = sayName.myBind(obj); sayTomName(); // 输出 Tom
+
+    // 测试 call 方法
+    function sayHello() { console.log(Hello, ${ this.name }!); }
+    var person = { name: 'Tom' }; sayHello.myCall(person); // 输出 Hello, Tom!
+  </script>
+</body>
+
+</html>

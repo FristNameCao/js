@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .slider-bar {
+      background-color: red;
+      height: 100px;
+      width: 100px;
+      position: absolute;
+      top: 400px;
+      right: 0;
+      /* overflow: auto; */
+
+    }
+
+    .goBack {
+      background-color: #f1afaf;
+      width: 100px;
+      height: 40px;
+      position: absolute;
+      bottom: -40px;
+      display: none;
+    }
+
+    .header {
+      background-color: pink;
+      margin-top: 4px;
+      height: 300px;
+    }
+
+    .banner {
+      background-color: skyblue;
+      margin-top: 4px;
+      height: 500px;
+    }
+
+    .main {
+      background-color: pink;
+      margin-top: 4px;
+      height: 1000px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="slider-bar">
+    <!-- <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p>
+    <p>111111111111111111111111111111111111111111111111</p> -->
+    <span class="goBack">返回顶部</span>
+  </div>
+  <div class="header">
+    头部
+  </div>
+  <div class="banner">banner</div>
+  <div class="main">主体</div>
+</body>
+
+</html>
+<script>
+  // 获取元素
+  let headerEl = document.querySelector('.header')
+  let bannerEl = document.querySelector('.banner')
+  let sliderEL = document.querySelector('.slider-bar')
+  let goBackEl = document.querySelector('.goBack')
+  let mainEl = document.querySelector('.main')
+
+
+  // sliderEL.addEventListener('scroll', function () {
+  //   console.log(sliderEL.scrollTop)
+  // })
+
+
+
+  // 获取headerEl元素高度
+  let headerEl_Height = headerEl.offsetHeight
+  // 获取bannerEl元素高度
+  let bannerEl_Height = bannerEl.offsetHeight
+
+  // 获取sliderEL距离顶部距离包含margin
+  let sliderEL_Top = sliderEL.offsetTop
+  // 获取banner距离顶部距离包含margin
+  let bannerEl_Top = bannerEl.offsetTop
+
+  // 计算sliderEL-banner剩余多少,后面fixed就一直距离顶部多少
+  let banner_Top = sliderEL_Top - bannerEl_Top
+
+
+  let sliderBar = document.querySelector('.slider-bar')
+  document.addEventListener('scroll', function () {
+
+    // console.log(window.pageYOffset)
+
+    if (window.pageYOffset > headerEl_Height) {
+      sliderBar.style.position = 'fixed'
+      sliderBar.style.top = banner_Top + 'px'
+      // 如果一直处于固定定位就一直执行这里
+      if (window.pageYOffset > mainEl.offsetTop) {
+        goBackEl.style.display = 'block'
+      }
+      else {
+        goBackEl.style.display = 'none'
+      }
+    }
+    else {
+      sliderBar.style.position = 'absolute'
+      sliderBar.style.top = 400 + 'px'
+
+
+
+    }
+
+
+  })
+</script>
